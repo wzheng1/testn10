@@ -1,1 +1,4 @@
-type=metric count=1
+#!/bin/bash
+
+value=`cat /proc/uptime | cut -f 1 -d ' '`
+echo "uptime=$value"

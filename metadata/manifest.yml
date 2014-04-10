@@ -46,11 +46,8 @@ Scaling:
   Max: -1
 
 Metrics:
-  - thread.count:
-        graph_type: line
-        display_name: Thread Count
-  - thread.active
-  - heap.permgen.size
+- uptime
+
 Endpoints:
 - Private-IP-Name: IP
   Private-Port-Name: PORT
