@@ -1,21 +1,27 @@
 ---
 locked_files:
+- ~/.pearrc
 - bin/
 - bin/*
+- conf/
+- conf/performance.conf.erb.hidden
+- configuration/
+- configuration/etc/
+- configuration/etc/conf/
+- configuration/etc/conf/*
+- configuration/etc/conf.d/
+- configuration/etc/conf.d/php.conf
+- configuration/etc/php.d/
+- configuration/etc/php.d/locked-*
 - metadata/
 - metadata/*
-- hooks/
-- hooks/*
 - env/
 - env/*
-- lib/
-- lib/*
-- etc/
+- hooks/
+- hooks/*
 processed_templates:
-- '**/*.erb'
-setup_rewritten:
-- 'versions/**/*'
+- 'conf/*.erb'
+- 'configuration/**/*.erb'
+- 'env/*.erb'
 dependency_dirs:
-- ~/.npm
-- node_modules
-- ~/.node_modules: node_modules
+- phplib

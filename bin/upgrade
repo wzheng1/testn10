@@ -1,47 +1,50 @@
-#!/bin/bash
+#!/bin/bash -eu
 
-source $OPENSHIFT_CARTRIDGE_SDK_BASH
-source "${OPENSHIFT_NODEJS_DIR}/lib/util"
-source "${OPENSHIFT_NODEJS_DIR}/lib/nodejs_context"
+php_version=$1
+curr=$2
+next=$3
 
-nodejs_version="$1"
-old_cart_version="$2"
-new_cart_version="$3"
-
-if [[ $old_cart_version =~ ^0.0.[0-4]$ ]]; then
-  echo "$nodejs_version" > $OPENSHIFT_NODEJS_DIR/env/OPENSHIFT_NODEJS_VERSION
-  update-configuration $nodejs_version
+if [[ $curr =~ ^0.0.[1-3]$ ]]; then
+    pear -c "$OPENSHIFT_HOMEDIR"/.pearrc config-get bin_dir > "$OPENSHIFT_PHP_DIR/env/OPENSHIFT_PHP_PATH_ELEMENT"
 fi
 
-if [ "${nodejs_version}" == "0.10" ]; then
-    express_path=$(readlink $OPENSHIFT_NODEJS_DIR/node_modules/express)
-    if [ "$express_path" != "/opt/rh/nodejs010/root/usr/lib/node_modules/express" ]; then
-        shopt -s dotglob
-        rm -rf $OPENSHIFT_NODEJS_DIR/node_modules/*
-        link_global_modules ${nodejs_version}
-    fi
+if [[ $curr == 0.0.4 ]]; then
+    mkdir -p $OPENSHIFT_HOMEDIR/.drush
 fi
 
-# Needed for version 0.0.1 -> 0.1.10.  This can be removed after the upgrade
+# Needed for version 0.0.1 -> 0.1.8.  This can be removed after the upgrade
 # has been deployed.
-if [ -e $OPENSHIFT_HOMEDIR/nodejs/metadata/jenkins_shell_command ]; then
-  rm -f $OPENSHIFT_HOMEDIR/nodejs/metadata/jenkins_shell_command
+if [ -e $OPENSHIFT_HOMEDIR/php/metadata/jenkins_shell_command ]; then
+    rm -f $OPENSHIFT_HOMEDIR/php/metadata/jenkins_shell_command
 fi
 
-# The LD_LIBRARY_PATH is now handled by the Node itself
-# and constructed using LD_LIBRARY_PATH_ELEMENT. This will
-# remove the existing LD_LIBRARY_PATH so the Node one can
-# take the precedence.
-#
-if [[ $new_cart_version == "0.0.14" ]]; then
-  if [ -f ${OPENSHIFT_NODEJS_DIR}env/LD_LIBRARY_PATH ]; then
-    rm -f ${OPENSHIFT_NODEJS_DIR}env/LD_LIBRARY_PATH
-  fi
-  update-configuration $nodejs_version
+if [[ $next == 0.0.12 ]]; then
+    chown $OPENSHIFT_GEAR_UUID:$OPENSHIFT_GEAR_UUID $OPENSHIFT_PHP_DIR/configuration/etc/conf.d/openshift.conf
+    chcon -u unconfined_u $OPENSHIFT_PHP_DIR/configuration/etc/conf.d/openshift.conf
 fi
 
-if [ -f ${OPENSHIFT_NODEJS_DIR}/env/OPENSHIFT_NODEJS_LOG_DIR ] && [ ! -L ${OPENSHIFT_NODEJS_DIR}/env/OPENSHIFT_NODEJS_LOG_DIR ]
+if [ -f ${OPENSHIFT_PHP_DIR}/env/OPENSHIFT_PHP_LOG_DIR ] && [ ! -L ${OPENSHIFT_PHP_DIR}/env/OPENSHIFT_PHP_LOG_DIR ]
 then
-    rm ${OPENSHIFT_NODEJS_DIR}/env/OPENSHIFT_NODEJS_LOG_DIR
-    ln -s ~/.env/OPENSHIFT_LOG_DIR ${OPENSHIFT_NODEJS_DIR}/env/OPENSHIFT_NODEJS_LOG_DIR
+    rm ${OPENSHIFT_PHP_DIR}/env/OPENSHIFT_PHP_LOG_DIR
+    ln -s ~/.env/OPENSHIFT_LOG_DIR ${OPENSHIFT_PHP_DIR}/env/OPENSHIFT_PHP_LOG_DIR
+fi
+
+if [[ $curr == 0.0.12 ]]; then
+    erb ${OPENSHIFT_PHP_DIR}versions/shared/configuration/etc/php.ini.erb > ${OPENSHIFT_PHP_DIR}configuration/etc/php.ini
+fi
+
+if [[ $curr == 0.0.13 ]]; then
+    echo "${OPENSHIFT_PHP_DIR}configuration/etc/php.d" > ${OPENSHIFT_PHP_DIR}env/PHP_INI_SCAN_DIR
+    # versions/ directory moved from user space (gear) to the shared usr/ directory (root)
+    rm -rf ${OPENSHIFT_PHP_DIR}versions
+    chown $OPENSHIFT_GEAR_UUID:$OPENSHIFT_GEAR_UUID ${OPENSHIFT_PHP_DIR}configuration/etc/php.ini
+    chcon -u unconfined_u ${OPENSHIFT_PHP_DIR}configuration/etc/php.ini
+fi
+
+if [[ $curr == 0.0.14 ]]; then
+    if [ -e ${OPENSHIFT_PHP_DIR}configuration/etc/php.d/locked-locked-mcrypt.ini ] ; then
+        # Update existing carts with fixed mcrypt ini name
+        rm ${OPENSHIFT_PHP_DIR}configuration/etc/php.d/locked-locked-mcrypt.ini
+        cp ${OPENSHIFT_PHP_DIR}/usr/${OPENSHIFT_PHP_VERSION}/etc/php.d/locked-mcrypt.ini ${OPENSHIFT_PHP_DIR}configuration/etc/php.d/locked-mcrypt.ini
+    fi
 fi

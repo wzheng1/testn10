@@ -1,47 +1,49 @@
 ---
-Name: dynodejs
-Cartridge-Short-Name: NODEJS
-Display-Name: Node.js 0.10
-Description: Node.js is a platform built on Chrome's JavaScript runtime for easily
-  building fast, scalable network applications. Node.js is perfect for data-intensive
-  real-time applications that run across distributed devices.
-Version: '0.10'
+Name: dyphp
+Cartridge-Short-Name: PHP
+Display-Name: PHP 5.4
+Description: ! 'PHP is a general-purpose server-side scripting language originally
+  designed for Web development to produce dynamic Web pages. Popular development frameworks
+  include: CakePHP, Zend, Symfony, and Code Igniter.'
+Version: '5.4'
+Provides:
+- php-5.4
+- php
 Versions:
-- '0.10'
-- '0.6'
-License: MIT License
-License-Url: https://raw.github.com/joyent/node/v0.10/LICENSE
-Vendor: www.nodejs.org
-Website: http://www.nodejs.org/
-Cartridge-Version: 0.0.15
+- '5.4'
+- '5.3'
+Version-Overrides:
+  '5.3':
+    Display-Name: PHP 5.3
+    Provides:
+    - php-5.3
+    - php
+License: The PHP License, version 3.0
+License-Url: http://www.php.net/license/3_0.txt
+Vendor: php.net
+Cartridge-Version: 0.0.14
 Compatible-Versions: []
 Cartridge-Vendor: dy
 Categories:
 - service
-- javascript
-- nodejs
+- php
 - web_framework
+Website: http://www.php.net
 Help-Topics:
   Developer Center: https://www.openshift.com/developers
-Provides:
-- nodejs-0.10
-- nodejs
-Scaling:
-  Min: 1
-  Max: -1
 Publishes:
-  get-doc-root:
-    Type: FILESYSTEM:doc-root
+  get-php-ini:
+    Type: FILESYSTEM:php-ini
 Subscribes:
   set-env:
     Type: ENV:*
     Required: false
-  set-mysql-connection-info:
-    Type: NET_TCP:db:mysql
+  set-doc-url:
+    Type: STRING:urlpath
     Required: false
-  set-postgres-connection-info:
-    Type: NET_TCP:db:postgres
-    Required: false
+Scaling:
+  Min: 1
+  Max: -1
 Endpoints:
 - Private-IP-Name: IP
   Private-Port-Name: PORT
@@ -61,15 +63,7 @@ Endpoints:
     Backend: ''
     Options:
       health: true
-Install-Build-Required: false
-Version-Overrides:
-  '0.6':
-    Display-Name: Node.js 0.6
-    Provides:
-    - nodejs-0.6
-    - nodejs
-    License-Url: https://raw.github.com/joyent/node/v0.6/LICENSE
-    Install-Build-Required: false
+
 #Source-Url: file:///root/testn10//root/test/testn10
 ##Source-Url: file:///root/testn10/
 ##Source-Md5: d916798a7e218f12b476bf1dee645f9d
