@@ -44,6 +44,13 @@ Subscribes:
 Scaling:
   Min: 1
   Max: -1
+
+Metrics:
+  - thread.count:
+        graph_type: line
+        display_name: Thread Count
+  - thread.active
+  - heap.permgen.size
 Endpoints:
 - Private-IP-Name: IP
   Private-Port-Name: PORT
@@ -63,16 +70,12 @@ Endpoints:
     Backend: ''
     Options:
       health: true
-Metrics:
-      thread.count:
-      graph_type: line
-      display_name: Thread Count
 
 #Source-Url: file:///root/testn10//root/test/testn10
-##Source-Url: file:///root/testn10/
-##Source-Md5: d916798a7e218f12b476bf1dee645f9d
-##Source-Url: https://github.com/duyanyan/testn10/raw/master/testn10.tar.gz
-##Source-Url: https://github.com/duyanyan/testn10/raw/master/testn10.zip
+#Source-Url: file:///root/testn10/
+#Source-Md5: d916798a7e218f12b476bf1dee645f9d
+#Source-Url: https://github.com/duyanyan/testn10/raw/master/testn10.tar.gz
+#Source-Url: https://github.com/duyanyan/testn10/raw/master/testn10.zip
 Source-Url: https://github.com/duyanyan/testn10.git
-##Source-Url: https://github.com/duyanyan/testn10.git
-##Source-Url: git://github.com/duyanyan/testn10.git
+#Source-Url: https://github.com/duyanyan/testn10.git
+#Source-Url: git://github.com/duyanyan/testn10.git
