@@ -63,6 +63,10 @@ Endpoints:
     Backend: ''
     Options:
       health: true
+Metrics:
+      thread.count:
+      graph_type: line
+      display_name: Thread Count
 
 #Source-Url: file:///root/testn10//root/test/testn10
 ##Source-Url: file:///root/testn10/
