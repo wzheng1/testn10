@@ -1,5 +1,5 @@
 #!/bin/bash
 
 value=`cat /proc/uptime | cut -f 1 -d ' '`
-sleep 1 
+sleep 2 
 echo "uptime=$value"
