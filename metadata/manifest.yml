@@ -45,8 +45,8 @@ Scaling:
   Min: 1
   Max: -1
 
-Metrics:
-- uptime
+#Metrics:
+#- uptime
 
 Endpoints:
 - Private-IP-Name: IP
